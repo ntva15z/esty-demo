@@ -7,17 +7,24 @@ const hbs = require("hbs");
 // Create a new express application
 const app = express();
 
-const appKey = 'r9qtb5a2os2j89iq1og3ox2z';
+/**
+These variables contain your API Key, the state sent
+in the initial authorization request, and the client verifier compliment
+to the code_challenge sent with the initial authorization request
+*/
+const clientID = 'r9qtb5a2os2j89iq1og3ox2z';
+const clientVerifier = '<same as the verifier used to create the code_challenge>';
+const redirectUri = 'http://localhost:3003/oauth/redirect';
 
 app.set("view engine", "hbs");
 app.set("views", `${process.cwd()}/views`);
 
-// Send a JSON response to a default get request
+// ping esty app ready
 app.get('/ping', async (req, res) => {
     const requestOptions = {
         'method': 'GET',
         'headers': {
-            'x-api-key': appKey,
+            'x-api-key': clientID,
         },
     };
 
@@ -39,14 +46,7 @@ app.get('/', async (req, res) => {
     res.render("index");
 });
 
-/**
-These variables contain your API Key, the state sent
-in the initial authorization request, and the client verifier compliment
-to the code_challenge sent with the initial authorization request
-*/
-const clientID = '<your API Key>';
-const clientVerifier = '<same as the verifier used to create the code_challenge>';
-const redirectUri = 'http://localhost:3003/oauth/redirect';
+
 
 app.get("/oauth/redirect", async (req, res) => {
     // The req.query object has the query params that Etsy authentication sends
